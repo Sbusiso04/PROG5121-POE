@@ -1,0 +1,51 @@
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+public class MessageManagerTest {
+    private MessageManager manager;
+
+    @Before
+    public void setUp() {
+        manager = new MessageManager();
+        // Populating test data according to Task specification
+        manager.addMessage("+27834557896", "Did you get the cake?", "Sent", "+27834557896", "HASH1");
+        manager.addMessage("+27838884567", "Where are you? You are late! I have asked you to be on time.", "Stored", "+27838884567", "HASH2");
+        manager.addMessage("+27834484567", "Yohoooo, I am at your gate.", "Disregard", "+27834484567", "HASH3");
+        manager.addMessage("0838884567", "It is dinner time!", "Sent", "0838884567", "HASH4");
+        manager.addMessage("+27838884567", "Ok, I am leaving without you.", "Stored", "+27838884567", "HASH5");
+    }
+
+    @Test
+    public void testSentMessagesArrayPopulated() {
+        assertEquals(2, manager.getSentMessages().size());
+        assertTrue(manager.getSentMessages().contains("Did you get the cake?"));
+        assertTrue(manager.getSentMessages().contains("It is dinner time!"));
+    }
+
+    @Test
+    public void testDisplayLongestMessage() {
+        String expected = "Where are you? You are late! I have asked you to be on time.";
+        assertEquals(expected, manager.displayLongestMessage());
+    }
+
+    @Test
+    public void testSearchByMessageID() {
+        String result = manager.searchByMessageID("0838884567");
+        assertTrue(result.contains("0838884567"));
+        assertTrue(result.contains("It is dinner time!"));
+    }
+
+    @Test
+    public void testSearchMessagesByRecipient() {
+        String result = manager.searchMessagesByRecipient("+27838884567");
+        assertTrue(result.contains("Where are you? You are late! I have asked you to be on time."));
+        assertTrue(result.contains("Ok, I am leaving without you."));
+    }
+
+    @Test
+    public void testDeleteMessageByHash() {
+        boolean deleted = manager.deleteMessageByHash("HASH2");
+        assertTrue("Message should be successfully deleted", deleted);
+    }
+}
